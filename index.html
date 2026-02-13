@@ -3,83 +3,821 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Be My Valentine?</title>
+  <title>Hanliang x XiaoYaoqiuzi (Highly Questionable Portal)</title>
+
+  <!-- Pixel font (old computer vibes) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(135deg, #ffe6ee, #fff6e6);
-      color: #1f1f1f;
+    :root{
+      --bg1:#ffe6ee;
+      --bg2:#fff6e6;
+      --card:rgba(255,255,255,0.80);
+      --soft:rgba(0,0,0,0.08);
+      --text:#1f1f1f;
+      --hot:#ff2f74;
+      --dark:#111;
     }
-    .card {
-      width: min(520px, 92vw);
-      background: rgba(255,255,255,0.75);
-      border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 18px;
-      padding: 28px;
-      text-align: center;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+
+    body{
+      margin:0;
+      min-height:100vh;
+      display:grid;
+      place-items:center;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      color:var(--text);
+      overflow:hidden;
+    }
+
+    .card{
+      width:min(760px, 92vw);
+      background:var(--card);
+      border:1px solid var(--soft);
+      border-radius:18px;
+      padding:26px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.08);
       backdrop-filter: blur(8px);
+      position:relative;
+      text-align:center;
     }
-    h1 { margin: 0 0 10px; font-size: 34px; }
-    p { margin: 0 0 20px; font-size: 16px; opacity: 0.85; }
-    .buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    button, a.btn {
-      border: 0;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-weight: 650;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
+
+    .badge{
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:999px;
+      border:1px solid var(--soft);
+      background:rgba(255,255,255,0.6);
+      font-weight:750;
+      font-size:13px;
+      margin-bottom:12px;
     }
-    #yes { background: #ff3b7a; color: white; }
-    #no  { background: #f1f1f1; color: #1f1f1f; }
-    .note { margin-top: 18px; font-size: 13px; opacity: 0.7; }
+
+    h1{
+      margin:0 0 8px;
+      font-size:clamp(24px, 3.8vw, 38px);
+      line-height:1.15;
+    }
+
+    .sub{
+      margin:0 0 16px;
+      font-size:15.5px;
+      opacity:0.86;
+    }
+
+    .row{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+
+    button{
+      border:0;
+      padding:12px 18px;
+      border-radius:999px;
+      font-weight:800;
+      cursor:pointer;
+      font-size:15px;
+      transition:transform 0.12s ease, filter 0.12s ease;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .primary{ background:var(--hot); color:white; box-shadow:0 10px 18px rgba(255,47,116,0.25); }
+    .ghost{ background:#f1f1f1; color:var(--text); }
+    .dark{ background:var(--dark); color:white; }
+
+    button:hover{ filter:brightness(1.02); transform:translateY(-1px); }
+
+    .msg{
+      margin-top:14px;
+      min-height:26px;
+      font-size:14px;
+      opacity:0.92;
+    }
+
+    .mini{
+      margin-top:8px;
+      font-size:12.5px;
+      opacity:0.72;
+    }
+
+    .hidden{ display:none; }
+
+    /* Spinning cat "meme" */
+    .spin-cat{
+      width:86px;
+      height:86px;
+      margin:10px auto 4px;
+      display:grid;
+      place-items:center;
+      border-radius:18px;
+      border:1px solid var(--soft);
+      background:rgba(255,255,255,0.65);
+      animation: wobble 0.9s ease-in-out infinite alternate;
+      position:relative;
+    }
+    .spin-cat .emoji{
+      font-size:52px;
+      display:inline-block;
+      animation: spin 0.55s linear infinite;
+      transform-origin: 50% 50%;
+    }
+    .spin-cat .caption{
+      position:absolute;
+      bottom:-18px;
+      font-size:12px;
+      opacity:0.7;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes wobble { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+
+    /* Floating weird cats */
+    .floaters{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:0.85;
+    }
+    .floater{
+      position:absolute;
+      font-size:22px;
+      animation: drift 10s linear infinite;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.08));
+    }
+    @keyframes drift{
+      from { transform: translateY(110vh) rotate(0deg); }
+      to { transform: translateY(-20vh) rotate(360deg); }
+    }
+
+    /* The YES-catching arena */
+    .arena{
+      width:min(680px, 92vw);
+      height:260px;
+      margin:14px auto 0;
+      border-radius:16px;
+      border:1px dashed rgba(0,0,0,0.15);
+      background:rgba(255,255,255,0.55);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .arena-hint{
+      position:absolute;
+      top:10px;
+      left:12px;
+      right:12px;
+      font-size:13px;
+      opacity:0.78;
+      text-align:left;
+    }
+
+    .runner{
+      position:absolute;
+      left:50%;
+      top:58%;
+      transform:translate(-50%, -50%);
+      white-space:nowrap;
+      touch-action:manipulation;
+    }
+
+    .score{
+      margin-top:10px;
+      font-size:12.5px;
+      opacity:0.72;
+    }
+
+    /* Confetti */
+    .confetti{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      display:none;
+    }
+    .confetti span{
+      position:absolute;
+      top:-10vh;
+      width:10px;
+      height:16px;
+      border-radius:4px;
+      opacity:0.9;
+      animation: fall 1.5s linear infinite;
+    }
+    @keyframes fall{ to { transform: translateY(120vh) rotate(360deg); } }
+
+    /* Tiny “glitchy” text vibe, but readable */
+    .glitch{
+      text-shadow: 1px 0 rgba(255,47,116,0.25), -1px 0 rgba(0,0,0,0.08);
+    }
+
+    /* Pixel popup (old computer) */
+    .pixel-overlay{
+      position:fixed;
+      inset:0;
+      display:none;
+      place-items:center;
+      background: rgba(0,0,0,0.18);
+      z-index: 50;
+    }
+
+    .pixel-window{
+      width: min(560px, 92vw);
+      background: #f7f7f7;
+      border: 3px solid #111;
+      box-shadow: 10px 12px 0 rgba(0,0,0,0.20);
+      border-radius: 12px;
+      overflow:hidden;
+      transform: scale(0.92);
+      animation: pop 0.22s ease-out forwards, flicker 3.2s infinite;
+      position: relative;
+    }
+
+    /* CRT scanlines + vignette */
+    .pixel-window::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(0,0,0,0.10) 0px,
+          rgba(0,0,0,0.10) 1px,
+          rgba(255,255,255,0.00) 3px,
+          rgba(255,255,255,0.00) 5px
+        );
+      opacity:0.35;
+      mix-blend-mode:multiply;
+    }
+    .pixel-window::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: radial-gradient(ellipse at center,
+        rgba(255,255,255,0.05) 0%,
+        rgba(0,0,0,0.16) 65%,
+        rgba(0,0,0,0.34) 100%);
+      opacity:0.95;
+    }
+
+    @keyframes pop{
+      to { transform: scale(1); }
+    }
+
+    @keyframes flicker{
+      0%, 100% { filter: contrast(1.03) brightness(1.01); }
+      50%      { filter: contrast(1.06) brightness(0.98); }
+      52%      { filter: contrast(1.02) brightness(1.02); }
+      63%      { filter: contrast(1.07) brightness(0.99); }
+    }
+
+    .pixel-titlebar{
+      background:#111;
+      color:#fff;
+      padding:10px 12px;
+      font-family: "Press Start 2P", monospace;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pixel-body{
+      padding: 16px 16px 14px;
+      display:grid;
+      gap: 10px;
+      text-align:center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pixel-text{
+      font-family: "Press Start 2P", monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color:#111;
+      text-shadow: 2px 2px 0 rgba(255,47,116,0.18);
+      letter-spacing: 0.2px;
+    }
+
+    .caret{
+      display:inline-block;
+      width: 12px;
+      margin-left: 6px;
+      animation: caretBlink 0.8s steps(2, end) infinite;
+    }
+    @keyframes caretBlink{
+      50% { opacity: 0; }
+    }
+
+    .pixel-actions{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top: 4px;
+    }
+    .pixel-actions button{
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-weight: 850;
+      font-size: 14px;
+      padding: 10px 14px;
+    }
+
+    .shake{
+      animation: shake 0.18s linear 2;
+    }
+    @keyframes shake{
+      25% { transform: translateX(-3px); }
+      50% { transform: translateX(3px); }
+      75% { transform: translateX(-2px); }
+      100% { transform: translateX(2px); }
+    }
   </style>
 </head>
+
 <body>
+  <div class="floaters" id="floaters" aria-hidden="true"></div>
+
   <div class="card">
-    <h1>Will you be my Valentine? 💖</h1>
-    <p>I promise good food, good vibes, and a proper date.</p>
+    <div class="badge">Restricted Access: Boyfriend With Jokes Only 😼</div>
 
-    <div class="buttons">
-      <button id="yes">Yes 🥰</button>
-      <button id="no">No 🙃</button>
-    </div>
+    <!-- STEP 1 -->
+    <section id="step1">
+      <h1 class="glitch">CHEN HANLIANG, answer honestly.</h1>
+      <p class="sub">Do you love <strong>XiaoYaoqiuzi</strong>? (Choose carefully. The cats are watching.)</p>
 
-    <div class="note" id="msg"></div>
+      <div class="spin-cat" title="spinning cat meme energy">
+        <div class="emoji">😺</div>
+        <div class="caption">spinning cat mode</div>
+      </div>
+
+      <div class="row">
+        <button class="primary" id="loveYes">Yes. I love her.</button>
+        <button class="ghost" id="loveYesHD">Yes, in 4K Ultra Love.</button>
+        <button class="ghost" id="loveNo">No (I want trouble).</button>
+      </div>
+
+      <div class="msg" id="msg1"></div>
+      <div class="mini" id="mini1"></div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section id="step2" class="hidden">
+      <h1 class="glitch">Correct. Here is your joke payment.</h1>
+      <p class="sub" id="jokeLine"></p>
+
+      <div class="row">
+        <button class="dark" id="continueBtn">Continue to the Weird Part</button>
+      </div>
+
+      <div class="msg" id="msg2"></div>
+      <div class="mini">Warning: proceeding may result in spontaneous affection and mild embarrassment.</div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section id="step3" class="hidden">
+      <h1 class="glitch">Valentine Protocol: Activated (Not Romantic, Just Weird)</h1>
+      <p class="sub">
+        If you want to become my <strong>Official February Co-op Partner</strong>, you must catch the YES button.
+        This is a very legitimate system.
+      </p>
+
+      <div class="arena" id="arena">
+        <div class="arena-hint">
+          Mission: Catch <strong>YES I ACCEPT THE CHAOS</strong>.
+          The button will run away if your cursor gets too close. On mobile, it will teleport when you try.
+        </div>
+
+        <button class="runner primary" id="yesRunner">YES I ACCEPT THE CHAOS 💘</button>
+      </div>
+
+      <div class="row" style="margin-top:12px;">
+        <button class="ghost" id="nopeBtn">No thanks (I fear joy)</button>
+        <button class="dark" id="summonCats">Summon More Cats</button>
+      </div>
+
+      <div class="msg" id="msg3"></div>
+      <div class="score" id="score3"></div>
+    </section>
+
+    <!-- STEP 4 -->
+    <section id="step4" class="hidden">
+      <h1 class="glitch">One more question, sir.</h1>
+      <p class="sub">What is your favourite thing about <strong>XiaoYaoqiuzi</strong>?</p>
+
+      <div class="row">
+        <button class="ghost" id="optBeauty">Beauty</button>
+        <button class="ghost" id="optBrains">Brains</button>
+        <button class="primary" id="optChaos">Everything tgt plus a touch of insanity hahahah</button>
+      </div>
+
+      <div class="msg" id="msg4"></div>
+      <div class="mini" id="mini4"></div>
+    </section>
   </div>
 
-  <script>
-    const msg = document.getElementById("msg");
-    const no = document.getElementById("no");
-    const yes = document.getElementById("yes");
+  <!-- Pixel popup -->
+  <div class="pixel-overlay" id="pixelOverlay" aria-hidden="true">
+    <div class="pixel-window" id="pixelWindow" role="dialog" aria-label="Love popup">
+      <div class="pixel-titlebar">
+        <span>WINDOWS 2000 LOVE.EXE</span>
+        <span>✖</span>
+      </div>
 
-    yes.addEventListener("click", () => {
-      msg.textContent = "YAY!! Text me: “YES 💖” so I can plan the date 😌";
+      <div class="pixel-body">
+        <div class="spin-cat" style="margin: 6px auto 2px;">
+          <div class="emoji">😺</div>
+          <div class="caption">spinning cat meme</div>
+        </div>
+
+        <div class="pixel-text" id="pixelText"></div>
+
+        <div class="pixel-actions">
+          <button class="dark" id="copyReply">Copy your reply text</button>
+          <button class="ghost" id="closePopup">OK I AM LOVED</button>
+        </div>
+
+        <div class="mini" id="finalMini"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti" aria-hidden="true"></div>
+
+  <script>
+    const NAME = "CHEN HANLIANG";
+    const HER = "XiaoYaoqiuzi";
+
+    // Elements
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+    const step3 = document.getElementById("step3");
+    const step4 = document.getElementById("step4");
+
+    const msg1 = document.getElementById("msg1");
+    const mini1 = document.getElementById("mini1");
+    const jokeLine = document.getElementById("jokeLine");
+    const msg2 = document.getElementById("msg2");
+
+    const msg3 = document.getElementById("msg3");
+    const score3 = document.getElementById("score3");
+
+    const msg4 = document.getElementById("msg4");
+    const mini4 = document.getElementById("mini4");
+
+    const yesRunner = document.getElementById("yesRunner");
+    const arena = document.getElementById("arena");
+
+    const confetti = document.getElementById("confetti");
+    const floaters = document.getElementById("floaters");
+
+    const pixelOverlay = document.getElementById("pixelOverlay");
+    const pixelWindow = document.getElementById("pixelWindow");
+    const pixelText = document.getElementById("pixelText");
+    const finalMini = document.getElementById("finalMini");
+
+    // --- Tiny retro beeps (WebAudio) ---
+    let audioCtx = null;
+    function ensureAudio(){
+      if (!audioCtx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AC();
+      }
+    }
+    function beep(freq = 440, ms = 120, type = "square", gainVal = 0.03){
+      try{
+        ensureAudio();
+        const t0 = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, t0);
+
+        gain.gain.setValueAtTime(0.0001, t0);
+        gain.gain.exponentialRampToValueAtTime(gainVal, t0 + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t0 + ms/1000);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(t0);
+        osc.stop(t0 + ms/1000 + 0.02);
+      } catch(e) {}
+    }
+    function errorBeep(){
+      beep(220, 110, "square", 0.03);
+      setTimeout(() => beep(165, 140, "square", 0.03), 120);
+    }
+    function happyBeep(){
+      beep(523.25, 90, "square", 0.025);
+      setTimeout(() => beep(659.25, 110, "square", 0.025), 100);
+      setTimeout(() => beep(783.99, 140, "square", 0.025), 220);
+    }
+
+    // Confetti setup
+    const confettiColors = ["#ff2f74","#ffb703","#8ecae6","#b7e4c7","#f7cad0"];
+    for (let i = 0; i < 80; i++) {
+      const s = document.createElement("span");
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+      s.style.animationDelay = (Math.random() * 0.8).toFixed(2) + "s";
+      s.style.animationDuration = (1.1 + Math.random() * 1.6).toFixed(2) + "s";
+      confetti.appendChild(s);
+    }
+    function popConfetti(){
+      confetti.style.display = "block";
+      setTimeout(() => confetti.style.display = "none", 1600);
+    }
+
+    // Floating cats
+    function addFloaters(count = 14){
+      const cats = ["😺","😸","😻","🙀","😹","🐈","🐾","💖","✨","🌀"];
+      for (let i = 0; i < count; i++){
+        const d = document.createElement("div");
+        d.className = "floater";
+        d.textContent = cats[Math.floor(Math.random() * cats.length)];
+        d.style.left = (Math.random() * 100).toFixed(2) + "vw";
+        d.style.animationDuration = (8 + Math.random() * 10).toFixed(2) + "s";
+        d.style.animationDelay = (Math.random() * 2).toFixed(2) + "s";
+        d.style.opacity = (0.55 + Math.random() * 0.4).toFixed(2);
+        floaters.appendChild(d);
+        setTimeout(() => d.remove(), 20000);
+      }
+    }
+    addFloaters(18);
+
+    // Step switching
+    function showStep(n){
+      [step1,step2,step3,step4].forEach(s => s.classList.add("hidden"));
+      [step1,step2,step3,step4][n-1].classList.remove("hidden");
+    }
+
+    // Clipboard helper
+    async function copyText(text){
+      try{
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch(e) {}
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      return true;
+    }
+
+    // STEP 1 actions
+    document.getElementById("loveYes").addEventListener("click", () => {
+      msg1.textContent = "Good. The cats have approved you. ✅";
+      mini1.textContent = "Proceeding to joke distribution in 3… 2… 1…";
+      setTimeout(() => goToJoke(), 650);
     });
 
-    const lines = [
-      "Are you sure? 😳",
-      "One more chance… 🥺",
-      "I’ll bring dessert 😭",
-      "Ok but you’re missing out 😤",
-      "Fine… but I’m still cute 🤨"
-    ];
-    let i = 0;
+    document.getElementById("loveYesHD").addEventListener("click", () => {
+      msg1.textContent = "Wow. 4K Ultra Love. That is premium. ✅";
+      mini1.textContent = "Proceeding to joke distribution in 3… 2… 1…";
+      setTimeout(() => goToJoke(), 650);
+    });
 
-    no.addEventListener("click", () => {
-      msg.textContent = lines[i % lines.length];
-      i++;
-      // Tiny “soft persuasion”: shrink the No button a bit each click
-      const scale = Math.max(0.55, 1 - i * 0.08);
-      no.style.transform = `scale(${scale})`;
-      // And gently boost Yes
-      yes.style.transform = `scale(${1 + i * 0.05})`;
+    let noClicks = 0;
+    document.getElementById("loveNo").addEventListener("click", () => {
+      noClicks++;
+      addFloaters(10);
+
+      const lines = [
+        `You clicked “No”. Interesting choice, ${NAME}.`,
+        "The spinning cat is now judging you.",
+        "This is not a safe decision. The cats have lawyers.",
+        `Last chance, ${NAME}. Do you love ${HER}?`
+      ];
+      msg1.textContent = lines[Math.min(noClicks-1, lines.length-1)];
+      mini1.textContent = "Try again. Choose one of the two correct answers.";
+
+      if (noClicks >= 3) {
+        setTimeout(() => goToJoke(), 600);
+      }
+    });
+
+    // STEP 2: Joke
+    const jokes = [
+      "Why did the cat sit on the laptop? Because it wanted to keep an eye on the mouse. 🐭😺",
+      "I was going to tell a time-travel joke, but you did not like it… yet. ⏳",
+      "Are you Wi-Fi? Because I’m feeling a strong connection and zero personal space. 📶",
+      "I tried to write a normal Valentine question, but it got nervous and turned into a cat. 😼"
+    ];
+
+    function goToJoke(){
+      showStep(2);
+      const j = jokes[Math.floor(Math.random() * jokes.length)];
+      jokeLine.textContent = j;
+      msg2.textContent = "Now we do the weird acceptance ceremony.";
+    }
+
+    document.getElementById("continueBtn").addEventListener("click", () => {
+      showStep(3);
+      placeRunnerRandom();
+      msg3.textContent = "Catch the YES button. Prove you are brave.";
+      updateScore();
+    });
+
+    // STEP 3: Running YES button (catch game)
+    let dodges = 0;
+    let caught = false;
+
+    function arenaRect(){
+      return arena.getBoundingClientRect();
+    }
+    function runnerRect(){
+      return yesRunner.getBoundingClientRect();
+    }
+
+    function placeRunnerRandom(){
+      const a = arenaRect();
+      const b = runnerRect();
+
+      const pad = 14;
+      const maxX = a.width - b.width - pad;
+      const maxY = a.height - b.height - pad;
+
+      const x = pad + Math.random() * Math.max(1, maxX - pad);
+      const y = 54 + Math.random() * Math.max(1, maxY - 54);
+
+      yesRunner.style.left = x + "px";
+      yesRunner.style.top = y + "px";
+      yesRunner.style.transform = "translate(0,0)";
+    }
+
+    function updateScore(){
+      score3.textContent = `Dodges: ${dodges} | Objective: Catch it.`;
+    }
+
+    arena.addEventListener("mousemove", (e) => {
+      if (caught) return;
+
+      const b = runnerRect();
+      const cx = b.left + b.width / 2;
+      const cy = b.top + b.height / 2;
+
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+
+      const threshold = dodges < 6 ? 120 : 90;
+
+      if (dist < threshold){
+        dodges++;
+        placeRunnerRandom();
+        updateScore();
+
+        const taunts = [
+          "Too slow. 😌",
+          "Nice try, champion.",
+          "Almost. But also no.",
+          "The button has anxiety, it ran away.",
+          "Skill issue (lovingly)."
+        ];
+        msg3.textContent = taunts[dodges % taunts.length];
+
+        if (dodges === 8) msg3.textContent = "Okay okay. I’ll let you catch it now. (Maybe.)";
+      }
+    });
+
+    yesRunner.addEventListener("touchstart", (e) => {
+      if (caught) return;
+      if (dodges < 6){
+        e.preventDefault();
+        dodges++;
+        placeRunnerRandom();
+        updateScore();
+        msg3.textContent = "It teleported. Again. Keep trying.";
+      }
+    }, { passive:false });
+
+    yesRunner.addEventListener("click", () => {
+      if (!caught && dodges < 2){
+        dodges++;
+        placeRunnerRandom();
+        updateScore();
+        msg3.textContent = "HAHA you almost had it. Try again.";
+        return;
+      }
+      caught = true;
+      popConfetti();
+      addFloaters(22);
+      showStep(4);
+      msg4.textContent = "You may proceed. Choose wisely.";
+      mini4.textContent = "Wrong answer = I will be disappointed. Correct answer = pixel love pop-up.";
+    });
+
+    document.getElementById("nopeBtn").addEventListener("click", () => {
+      addFloaters(12);
+      msg3.textContent = "You pressed No. The cats will remember this. Try catching YES instead.";
+    });
+
+    document.getElementById("summonCats").addEventListener("click", () => {
+      addFloaters(24);
+      msg3.textContent = "Cats summoned. The weirdness level has increased.";
+    });
+
+    // STEP 4: Favourite thing question logic
+    let disappointmentCount = 0;
+
+    function disappointed(whichBtn){
+      errorBeep();
+      disappointmentCount++;
+      addFloaters(12);
+
+      msg4.textContent = "I am disappointed with your choice.";
+      mini4.textContent = "Try again. There is only one answer that matches the truth and my personality.";
+
+      if (whichBtn){
+        whichBtn.classList.add("shake");
+        setTimeout(() => whichBtn.classList.remove("shake"), 260);
+      }
+
+      if (disappointmentCount >= 2){
+        mini4.textContent = "Hint: It’s the one that includes ‘insanity’. Obviously.";
+      }
+    }
+
+    // Typewriter pixel text
+    let typingTimer = null;
+    function typePixelText(text, speed = 34){
+      if (typingTimer) clearInterval(typingTimer);
+      const caret = '<span class="caret">█</span>';
+      let i = 0;
+      pixelText.innerHTML = caret;
+
+      typingTimer = setInterval(() => {
+        i++;
+        const shown = text.slice(0, i);
+        pixelText.innerHTML = `${shown}${caret}`;
+        if (i >= text.length){
+          clearInterval(typingTimer);
+          typingTimer = null;
+          pixelText.innerHTML = `${text}${caret}`;
+        }
+      }, speed);
+    }
+
+    function showPixelLove(){
+      happyBeep();
+      popConfetti();
+      addFloaters(30);
+
+      // show overlay
+      pixelOverlay.style.display = "grid";
+
+      // tiny CRT "boot" moment
+      pixelWindow.style.transform = "scale(0.98)";
+      setTimeout(() => { pixelWindow.style.transform = ""; }, 60);
+
+      const loveLine = "baboo baboo I lubbbb youuuuuu";
+      typePixelText(loveLine, 34);
+
+      const reply = `YES 💖 I love ${HER}. Favourite thing: Everything tgt plus a touch of insanity. (Signed: ${NAME})`;
+      finalMini.textContent = reply;
+    }
+
+    const optBeauty = document.getElementById("optBeauty");
+    const optBrains = document.getElementById("optBrains");
+    const optChaos  = document.getElementById("optChaos");
+
+    optBeauty.addEventListener("click", () => disappointed(optBeauty));
+    optBrains.addEventListener("click", () => disappointed(optBrains));
+    optChaos.addEventListener("click", () => showPixelLove());
+
+    // Popup actions
+    document.getElementById("copyReply").addEventListener("click", async () => {
+      const text = finalMini.textContent || "";
+      if (!text) return;
+      await copyText(text);
+      popConfetti();
+      happyBeep();
+      typePixelText("COPIED ✅ baboo baboo I lubbbb youuuuuu", 26);
+    });
+
+    document.getElementById("closePopup").addEventListener("click", () => {
+      pixelOverlay.style.display = "none";
+    });
+
+    // Close popup when clicking outside window (optional but nice)
+    pixelOverlay.addEventListener("click", (e) => {
+      if (e.target === pixelOverlay) pixelOverlay.style.display = "none";
     });
   </script>
 </body>
